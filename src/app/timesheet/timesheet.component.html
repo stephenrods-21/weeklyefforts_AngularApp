@@ -1,0 +1,122 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Time Sheet</h1>
+            <a class="btn btn-sm btn-default pull-right" [routerLink]="['/']"><i class="glyphicon glyphicon-chevron-left"></i> Go back</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="sel1">Select employees:</label>
+                <select class="form-control" id="emplist" (change)="onEmployeeChange($event.target.value)">
+            <option *ngFor="let item of employees" [value]="item.id" [selected]="employeeId == item.id">{{item.name}}</option>
+          </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-sm btn-default pull-right" style="margin-left: 10px;" (click)="onEdit()"><i class="glyphicon glyphicon-pencil"></i> Edit</button>
+            <button type="button" class="btn btn-sm btn-default pull-right" (click)="onAdd()" *ngIf="editMode"><i class="glyphicon glyphicon-plus"></i> Add</button>
+        </div>
+    </div>
+
+    <div *ngIf="!editMode">
+        <table class="table" *ngIf="timesheets">
+            <tr>
+                <th>Task Name</th>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+            </tr>
+            <tr *ngFor="let item of timesheets.timeSheetDetailVM">
+                <td>{{item.taskName}}</td>
+                <td>{{item.sun}}</td>
+                <td>{{item.mon}}</td>
+                <td>{{item.tue}}</td>
+                <td>{{item.wed}}</td>
+                <td>{{item.thur}}</td>
+                <td>{{item.fri}}</td>
+                <td>{{item.sat}}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th>{{timesheets.totalSunEffort}}</th>
+                <th>{{timesheets.totalMonEffort}}</th>
+                <th>{{timesheets.totalTueEffort}}</th>
+                <th>{{timesheets.totalWedEffort}}</th>
+                <th>{{timesheets.totalThurEffort}}</th>
+                <th>{{timesheets.totalFriEffort}}</th>
+                <th>{{timesheets.totalSatEffort}}</th>
+            </tr>
+        </table>
+    </div>
+
+    <div *ngIf="editMode">
+        <!-- Editable table -->
+        <div class="card">
+            <h3 class="card-header text-center font-weight-bold text-uppercase py-4"><i class="glyphicon glyphicon-chevron-left"></i> Week <i class="glyphicon glyphicon-chevron-right"></i></h3>
+            <div class="card-body">
+                <div id="table" class="table-editable">
+                    <span class="table-add float-right mb-3 mr-2">
+          <a class="text-success" (click)="add()">
+          </a>
+        </span>
+                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                        <tr>
+                            <th class="text-center">Task name</th>
+                            <th class="text-center">Sunday</th>
+                            <th class="text-center">Monday</th>
+                            <th class="text-center">Tuesday</th>
+                            <th class="text-center">Wednesday</th>
+                            <th class="text-center">Thursday</th>
+                            <th class="text-center">Friday</th>
+                            <th class="text-center">Saturday</th>
+                        </tr>
+                        <tr *ngFor="let task of timesheets.timeSheetDetailVM; let id = index">
+                            <td>
+                                <select class="form-control" id="tasklist" (change)="updateSelectList(id, 'taskId', $event.target.value)">
+                                    <option *ngFor="let item of tasks" [value]="item.id" [selected]="task.taskId == item.id">{{item.name}}</option>
+                                  </select>
+                            </td>
+                            <td>
+                                <span contenteditable="true" (keyup)="changeValue(id, 'sun', $event)" (blur)="updateList(id, 'sun', $event)">{{task.sun}}</span>
+                            </td>
+                            <td>
+                                <span contenteditable="true" (keyup)="changeValue(id, 'mon', $event)" (blur)="updateList(id, 'mon', $event)">{{task.mon}}</span>
+                            </td>
+                            <td>
+                                <span contenteditable="true" (keyup)="changeValue(id, 'tue', $event)" (blur)="updateList(id, 'tue', $event)">{{task.tue}}</span>
+                            </td>
+                            <td>
+                                <span contenteditable="true" (keyup)="changeValue(id, 'wed', $event)" (blur)="updateList(id, 'wed', $event)">{{task.wed}}</span>
+                            </td>
+                            <td>
+                                <span contenteditable="true" (keyup)="changeValue(id, 'thur', $event)" (blur)="updateList(id, 'thur', $event)">{{task.thur}}</span>
+                            </td>
+                            <td>
+                                <span contenteditable="true" (keyup)="changeValue(id, 'fri', $event)" (blur)="updateList(id, 'fri', $event)">{{task.fri}}</span>
+                            </td>
+                            <td>
+                                <span contenteditable="true" (keyup)="changeValue(id, 'sat', $event)" (blur)="updateList(id, 'sat', $event)">{{task.sat}}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Editable table -->
+
+        <button type="button" class="btn btn-sm btn-default pull-right" (click)="onSaveChanges()"><i class="glyphicon glyphicon-ok"></i> Save Changes</button>
+
+    </div>
+
+</div>
